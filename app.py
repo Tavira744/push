@@ -23,7 +23,7 @@ if uploaded_file is not None:
     unique_name = f"{int(time.time())}_{original_name}"
 
     st.success(f"Uploaded: {original_name}")
-    file_content = original_name.read()
+    file_content = uploaded_file.read()
     st.write(f"File size: {len(file_content)} bytes")
 
     # Upload to Supabase
