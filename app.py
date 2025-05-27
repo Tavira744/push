@@ -1,11 +1,11 @@
 import streamlit as st
 from supabase import create_client, Client
-import os
+import os 
 
 # Supabase credentials (you can set these as Streamlit secrets later)
-SUPABASE_URL = 'https://YOUR_SUPABASE_URL.supabase.co'
-SUPABASE_KEY = 'YOUR_SUPABASE_ANON_KEY'
-BUCKET_NAME = 'pnr-files'
+SUPABASE_URL = 'https://quxsczncwedcxxflwyhh.supabase.co'
+SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InF1eHNjem5jd2VkY3h4Zmx3eWhoIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDgzMzk0MzIsImV4cCI6MjA2MzkxNTQzMn0.XhpqxgIic9mNEd2pxhsztZ-WaL5x2zngozbHUld2Wco'
+BUCKET_NAME = 'push-files'
 
 # Connect to Supabase
 supabase: Client = create_client(SUPABASE_URL, SUPABASE_KEY)
