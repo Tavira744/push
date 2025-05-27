@@ -25,8 +25,9 @@ if uploaded_file is not None:
 
         # Upload file to bucket
         response = supabase.storage.from_(BUCKET_NAME).upload(file_path, file_content)
-
-        if response.get('error') is None:
+        
+        if response.error is None:
             st.success(f"✅ File uploaded to Supabase bucket `{BUCKET_NAME}`!")
         else:
-            st.error(f"❌ Upload failed: {response.get('error')['message']}")
+            st.error(f"❌ Upload failed: {res.error}")
+
