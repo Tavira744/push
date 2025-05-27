@@ -4,37 +4,28 @@ import os
 import time
 
 
-# Supabase credentials (you can set these as Streamlit secrets later)
-SUPABASE_URL = 'https://quxsczncwedcxxflwyhh.supabase.co'
-SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InF1eHNjem5jd2VkY3h4Zmx3eWhoIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDgzMzk0MzIsImV4cCI6MjA2MzkxNTQzMn0.XhpqxgIic9mNEd2pxhsztZ-WaL5x2zngozbHUld2Wco'
-BUCKET_NAME = 'push-files'
+SUPABASE_URL = st.secrets['SUPABASE_URL']
+SUPABASE_KEY = st.secrets['SUPABASE_KEY']
+BUCKET_NAME = 'pnr-files'
 
-# Connect to Supabase
 supabase: Client = create_client(SUPABASE_URL, SUPABASE_KEY)
-
-st.title("PNR Analyzer (with Supabase Storage)")
 
 uploaded_file = st.file_uploader("Upload your PNR file (CSV, XML, JSON)", type=['csv', 'xml', 'json'])
 
 if uploaded_file is not None:
-    # Original file name
-    original_name = uploaded_file.name
-    # Add Unix timestamp to make it unique
-    unique_name = f"{int(time.time())}_{original_name}"
-
-    st.success(f"Uploaded: {original_name}")
+    st.success(f"Uploaded: {uploaded_file.name}")
     file_content = uploaded_file.read()
-    st.write(f"File size: {len(file_content)} bytes")
 
-    # Upload to Supabase
+    # Create unique filename
+    unique_name = f"{int(time.time())}_{uploaded_file.name}"
+
     if st.button("Upload to Supabase"):
-        file_path = f"{unique_name}"
+        res = supabase.storage.from_(BUCKET_NAME).upload(
+            unique_name,
+            file_content
+        )
 
-        # Upload file to bucket
-        response = supabase.storage.from_(BUCKET_NAME).upload(file_path, file_content)
-        
-        if response.error is None:
-            st.success(f"✅ File uploaded to Supabase bucket `{BUCKET_NAME}`!")
+        if res.data:
+            st.success(f"✅ File uploaded as `{unique_name}` to Supabase!")
         else:
             st.error(f"❌ Upload failed: {res.error}")
-
