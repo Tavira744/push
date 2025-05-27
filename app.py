@@ -1,6 +1,8 @@
 import streamlit as st
 from supabase import create_client, Client
-import os 
+import os
+import time
+
 
 # Supabase credentials (you can set these as Streamlit secrets later)
 SUPABASE_URL = 'https://quxsczncwedcxxflwyhh.supabase.co'
@@ -15,13 +17,18 @@ st.title("PNR Analyzer (with Supabase Storage)")
 uploaded_file = st.file_uploader("Upload your PNR file (CSV, XML, JSON)", type=['csv', 'xml', 'json'])
 
 if uploaded_file is not None:
-    st.success(f"Uploaded: {uploaded_file.name}")
-    file_content = uploaded_file.read()
+    # Original file name
+    original_name = uploaded_file.name
+    # Add Unix timestamp to make it unique
+    unique_name = f"{int(time.time())}_{original_name}"
+
+    st.success(f"Uploaded: {original_name}")
+    file_content = original_name.read()
     st.write(f"File size: {len(file_content)} bytes")
 
     # Upload to Supabase
     if st.button("Upload to Supabase"):
-        file_path = f"{uploaded_file.name}"
+        file_path = f"{unique_name}"
 
         # Upload file to bucket
         response = supabase.storage.from_(BUCKET_NAME).upload(file_path, file_content)
