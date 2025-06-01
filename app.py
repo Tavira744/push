@@ -24,7 +24,7 @@ if uploaded_file is not None:
                 file_content
             )
 
-            if res.data:
+            if res.status_code == 200:
                 status = 'success'
                 error_message = None
                 st.success(f"✅ Uploaded as `{unique_name}`!")
@@ -32,7 +32,7 @@ if uploaded_file is not None:
                 status = 'failed'
                 error_message = str(res.error)
                 st.error(f"❌ Upload failed: {error_message}")
-
+        st.write("NOTE > Upload response:", res)
         except Exception as e:
             status = 'failed'
             error_message = str(e)
