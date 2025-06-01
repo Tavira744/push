@@ -2,14 +2,26 @@ import streamlit as st
 from supabase import create_client, Client
 import time
 
+# Load Supabase credentials from Streamlit secrets
 SUPABASE_URL = st.secrets['SUPABASE_URL']
 SUPABASE_KEY = st.secrets['SUPABASE_KEY']
 BUCKET_NAME = 'push-files'
 
+# Connect to Supabase
 supabase: Client = create_client(SUPABASE_URL, SUPABASE_KEY)
 
+# 🔍 Debug: Check current database role
+try:
+    role_res = supabase.rpc('get_current_role').execute()
+    st.write("🔍 Current DB role (from Supabase):", role_res.data)
+except Exception as e:
+    st.warning("⚠ Could not fetch current DB role.")
+    st.write("Exception details:", str(e))
+
+# App title
 st.title("PNR File Uploader with Upload Logging")
 
+# File upload section
 uploaded_file = st.file_uploader("Upload your PNR file (CSV, XML, JSON)", type=['csv', 'xml', 'json'])
 
 if uploaded_file is not None:
@@ -19,28 +31,26 @@ if uploaded_file is not None:
 
     if st.button("Upload to Supabase"):
         try:
-            res = supabase.storage.from_(BUCKET_NAME).upload(
-                unique_name,
-                file_content
-            )
+            # Upload to Supabase Storage
+            res = supabase.storage.from_(BUCKET_NAME).upload(unique_name, file_content)
             res_dict = res.__dict__
+
             if res_dict.get('error'):
                 status = 'failed'
-                error_message = str(res.error)
-                st.error(f"❌ Upload failed: {res_dict['error']}")
-                
+                error_message = str(res_dict['error'])
+                st.error(f"❌ Upload failed: {error_message}")
             else:
                 status = 'success'
                 error_message = None
                 st.success(f"✅ Uploaded as `{unique_name}`!")
-                
+
         except Exception as e:
             status = 'failed'
             error_message = str(e)
             st.error("❌ Unexpected error during upload.")
             st.write("⚠ Exception details:", error_message)
 
-        # ✅ Log the result into the Supabase Postgres table
+        # Log the result into the Supabase Postgres table
         try:
             log_res = supabase.table('upload_logs').insert({
                 'filename': uploaded_file.name,
@@ -49,10 +59,13 @@ if uploaded_file is not None:
                 'error_message': error_message
             }).execute()
 
-            if log_res.data:
+            # Safely display log response
+            log_res_dict = log_res.__dict__
+            if log_res_dict.get('data'):
                 st.info("📝 Upload log saved to database.")
             else:
                 st.warning("⚠ Failed to log upload to database.")
+                st.write("Log response details:", log_res_dict)
 
         except Exception as log_error:
             st.warning(f"⚠ Logging to database failed: {str(log_error)}")
