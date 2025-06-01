@@ -29,7 +29,7 @@ if uploaded_file is not None:
     file_content = uploaded_file.read()
     unique_name = f"{int(time.time())}_{uploaded_file.name}"
 
-    if st.button("Upload to Supabase"):
+    if st.button("Upload to Supabase V2"):
         try:
             # Upload to Supabase Storage
             res = supabase.storage.from_(BUCKET_NAME).upload(unique_name, file_content)
