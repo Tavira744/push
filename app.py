@@ -23,18 +23,16 @@ if uploaded_file is not None:
                 unique_name,
                 file_content
             )
-
-            if res.error:
+            res_dict = res.__dict__
+            if res_dict.get('error'):
                 status = 'failed'
                 error_message = str(res.error)
-                st.error(f"❌ Upload failed: {error_message}")
-                st.write("NOTE > Upload response:", res)
+                st.error(f"❌ Upload failed: {res_dict['error']}")
                 
             else:
                 status = 'success'
                 error_message = None
                 st.success(f"✅ Uploaded as `{unique_name}`!")
-                st.write("NOTE > Upload response:", res)
                 
         except Exception as e:
             status = 'failed'
