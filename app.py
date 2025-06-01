@@ -42,7 +42,7 @@ if uploaded_file is not None:
             else:
                 status = 'success'
                 error_message = None
-                st.success(f"✅ Uploaded as `{unique_name}`!")
+                st.success(f"✅ Uploaded as V2 `{unique_name}`!")
 
         except Exception as e:
             status = 'failed'
@@ -68,4 +68,4 @@ if uploaded_file is not None:
                 st.write("Log response details:", log_res_dict)
 
         except Exception as log_error:
-            st.warning(f"⚠ Logging to database failed: {str(log_error)}")
+            st.warning(f"⚠ Logging to database failed V2: {str(log_error)}")
