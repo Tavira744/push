@@ -1,6 +1,8 @@
 import streamlit as st
 from supabase import create_client, Client
 import time
+import os
+
 
 # Load Supabase credentials from Streamlit secrets
 SUPABASE_URL = st.secrets['SUPABASE_URL']
