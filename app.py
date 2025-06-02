@@ -29,8 +29,8 @@ st.title("Uploader V0")
 uploaded_file = st.file_uploader("file (CSV, XML, JSON)", type=['csv', 'xml', 'json'])
 
 if uploaded_file is not None:
-    # st.success(f"✅ File ready: {uploaded_file.name}")
-    st.success(f"✅ File ready")
+    st.success(f"✅ File ready: {uploaded_file.name}")
+    # st.success(f"✅ File ready")
     
     file_content = uploaded_file.read()
     unique_name = f"{int(time.time())}_{uploaded_file.name}"
@@ -48,8 +48,8 @@ if uploaded_file is not None:
             else:
                 status = 'success'
                 error_message = None
-                # st.success(f"✅ Uploaded as V2 `{unique_name}`!")
-                st.success(f"✅ Uploaded")
+                st.success(f"✅ Uploaded as V2 `{unique_name}`!")
+                # st.success(f"✅ Uploaded")
         except Exception as e:
             status = 'failed'
             error_message = str(e)
@@ -78,8 +78,8 @@ if uploaded_file is not None:
             # Safely display log response
             log_res_dict = log_res.__dict__
             if log_res_dict.get('data'):
-               # st.info("📝 Upload log saved to database.")
-               st.info(f"✅ Ready for processing.")
+               st.info("📝 Upload log saved to database.")
+               # st.info(f"✅ Ready for processing.")
             else:
                 st.warning("⚠ Failed to log upload to database.")
                 st.write("Log response details:", log_res_dict)
