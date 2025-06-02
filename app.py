@@ -78,6 +78,7 @@ if uploaded_file is not None:
             log_res_dict = log_res.__dict__
             if log_res_dict.get('data'):
                # st.info("📝 Upload log saved to database.")
+               "xxxxxx"
             else:
                 st.warning("⚠ Failed to log upload to database.")
                 st.write("Log response details:", log_res_dict)
