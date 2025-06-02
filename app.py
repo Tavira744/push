@@ -86,3 +86,41 @@ if uploaded_file is not None:
 
         except Exception as log_error:
             st.warning(f"⚠ Logging to database failed V2: {str(log_error)}")
+
+#####################################################################################
+# NEW SECTION: Load question_map.xml from Supabase Storage
+#####################################################################################
+
+try:
+    TOPIC_BUCKET = 'topic.map'
+    TOPIC_FILE = 'question_map.xml'
+
+    ref_file_res = supabase.storage.from_(TOPIC_BUCKET).download(TOPIC_FILE)
+    xml_content = ref_file_res.decode('utf-8')
+
+    root = ET.fromstring(xml_content)
+
+    questions_data = {}
+    for topic in root.findall('topic'):
+        topic_name = topic.get('name')
+        questions_data[topic_name] = []
+
+        for question in topic.findall('question'):
+            text = question.find('text').text
+            prompts = [p.text for p in question.find('prompts').findall('prompt')]
+            agent_name = question.find('agent_name').text
+
+            questions_data[topic_name].append({
+                'text': text,
+                'prompts': prompts,
+                'agent_name': agent_name
+            })
+
+    st.info("✅ Loaded question_map.xml successfully")
+    st.write("📦 Loaded Questions Map:", questions_data)
+
+except Exception as e:
+    st.warning("⚠ Failed to load question_map.xml from Supabase Storage.")
+    st.write("Exception details:", str(e))
+
+
