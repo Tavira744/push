@@ -59,6 +59,13 @@ if uploaded_file is not None:
                 'error_message': error_message
             }).execute()
 
+            st.write("🚨 Insert payload going to Supabase:", {
+                'filename': uploaded_file.name,
+                'unique_name': unique_name,
+                'status': status,
+                'error_message': error_message
+            })
+
             # Safely display log response
             log_res_dict = log_res.__dict__
             if log_res_dict.get('data'):
