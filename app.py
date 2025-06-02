@@ -90,6 +90,27 @@ if uploaded_file is not None:
 #####################################################################################
 # NEW SECTION: Load question_map.xml from Supabase Storage
 #####################################################################################
+BUCKET_NAME = 'topic.map' 
+try:
+    # List all files/objects in the bucket
+    res = supabase.storage.from_(BUCKET_NAME).list()
+    
+    if res:
+        st.write(f"📦 Objects in bucket `{BUCKET_NAME}`:")
+        for obj in res:
+            st.write(f"- {obj['name']}")
+    else:
+        st.warning(f"No files found in bucket `{BUCKET_NAME}`.")
+
+except Exception as e:
+    st.error(f"❌ Failed to list bucket `{BUCKET_NAME}`")
+    st.write("Exception details:", str(e))
+
+
+
+
+
+
 
 try:
     TOPIC_BUCKET = 'topic.map'
