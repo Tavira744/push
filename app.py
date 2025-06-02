@@ -48,7 +48,8 @@ if uploaded_file is not None:
             status = 'failed'
             error_message = str(e)
             st.error("❌ Unexpected error during upload.")
-            st.write("⚠ Exception details:", error_message)
+            st.write("⚠ Exception details:", 'error_message': error_message if error_message is not None else ''
+)
 
         # Log the result into the Supabase Postgres table
         try:
@@ -56,7 +57,8 @@ if uploaded_file is not None:
                 'filename': uploaded_file.name,
                 'unique_name': unique_name,
                 'status': status,
-                'error_message': error_message
+                'error_message': error_message if error_message is not None else ''
+
             })
             
             log_res = supabase.table('upload_logs').insert({
