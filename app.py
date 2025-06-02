@@ -142,22 +142,38 @@ if uploaded_file is not None:
         # Read and decode the file content
         file_content = uploaded_file.read().decode('utf-8')
 
+
+#######################################################################################
         # Build the prompt
-        prompt = f"""
+
+prompt = f"""
 You are an expert at reading airline booking files (PNRs).
-Given the following file content, extract a table listing:
-PNR Reference, Name, Surname, Date of Birth, Seat Number.
+Given the following file content, extract:
+
+1. A header section that dynamically includes **any and all details common to all passengers**.
+For example: flight number, airline, route, departure time, arrival time, aircraft type, aircraft manufacturer, pilot name — 
+or any other shared details found.
+
+2. A passenger list section with: PNR Reference, Name, Surname, Date of Birth, Seat Number.
 
 File content:
 {file_content}
 
-Output as JSON array:
-[
-    {{"pnr_reference": "...", "name": "...", "surname": "...", "dob": "...", "seat_number": "..."}},
-    ...
-]
+Output as JSON object:
+{{
+    "header": {{
+        <key>: <value>,
+        <key>: <value>,
+        ...
+    }},
+    "passengers": [
+        {{"pnr_reference": "...", "name": "...", "surname": "...", "dob": "...", "seat_number": "..."}},
+        ...
+    ]
+}}
+Only include fields in the header if they actually appear in the file.
 """
-
+####################################################################################
         # Send to OpenAI GPT
         response = openai.ChatCompletion.create(
             model="gpt-3.5-turbo",
@@ -167,15 +183,19 @@ Output as JSON array:
 
         # Parse GPT response
         response_text = response['choices'][0]['message']['content']
-        passenger_list = json.loads(response_text)
+parsed_result = json.loads(response_text)
 
-        # Convert to DataFrame
-        df = pd.DataFrame(passenger_list)
+header = parsed_result['header']
+passenger_list = parsed_result['passengers']
 
-        st.success("✅ Passenger table extracted successfully!")
-        st.dataframe(df)
+# Display header dynamically
+st.subheader("✈ Flight Details (All Shared Info)")
+for key, value in header.items():
+    st.write(f"**{key}**: {value}")
 
-    except Exception as e:
-        st.error("❌ AI agent failed to extract passenger data.")
-        st.write("⚠ Exception details:", str(e))
+# Display passengers
+import pandas as pd
+df = pd.DataFrame(passenger_list)
+st.subheader("🧳 Passenger List")
+st.dataframe(df)
 
