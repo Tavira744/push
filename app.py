@@ -99,7 +99,7 @@ try:
     xml_content = ref_file_res.decode('utf-8')
 
     root = ET.fromstring(xml_content)
-
+    st.write("HERE...")
     questions_data = {}
     for topic in root.findall('topic'):
         topic_name = topic.get('name')
