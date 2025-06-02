@@ -143,10 +143,10 @@ if uploaded_file is not None:
         file_content = uploaded_file.read().decode('utf-8')
 
 
-#######################################################################################
+        #######################################################################################
         # Build the prompt
 
-prompt = f"""
+        prompt = f"""
 You are an expert at reading airline booking files (PNRs).
 Given the following file content, extract:
 
@@ -172,8 +172,8 @@ Output as JSON object:
     ]
 }}
 Only include fields in the header if they actually appear in the file.
-"""
-####################################################################################
+        """
+        ####################################################################################
         # Send to OpenAI GPT
         response = openai.ChatCompletion.create(
             model="gpt-3.5-turbo",
@@ -183,19 +183,19 @@ Only include fields in the header if they actually appear in the file.
 
         # Parse GPT response
         response_text = response['choices'][0]['message']['content']
-parsed_result = json.loads(response_text)
+        parsed_result = json.loads(response_text)
 
-header = parsed_result['header']
-passenger_list = parsed_result['passengers']
+        header = parsed_result['header']
+        passenger_list = parsed_result['passengers']
 
-# Display header dynamically
-st.subheader("✈ Flight Details (All Shared Info)")
-for key, value in header.items():
-    st.write(f"**{key}**: {value}")
+        # Display header dynamically
+        st.subheader("✈ Flight Details (All Shared Info)")
+        for key, value in header.items():
+            st.write(f"**{key}**: {value}")
 
-# Display passengers
-import pandas as pd
-df = pd.DataFrame(passenger_list)
-st.subheader("🧳 Passenger List")
-st.dataframe(df)
+        # Display passengers
+        import pandas as pd
+        df = pd.DataFrame(passenger_list)
+        st.subheader("🧳 Passenger List")    
+        st.dataframe(df)
 
