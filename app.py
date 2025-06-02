@@ -91,46 +91,6 @@ if uploaded_file is not None:
 #####################################################################################
 # NEW SECTION: Load question_map.xml from Supabase Storage
 #####################################################################################
-BUCKET_NAME = 'topic.map' 
-
-try:
-    res = supabase.storage.from_('topic.map').download('question_map.xml')
-    st.success("✅ Successfully downloaded question_map.xml directly!")
-except Exception as e:
-    st.error(f"❌ Direct download failed: {str(e)}")
-
-
-try:
-    # List root-level objects
-    res = supabase.storage.from_(BUCKET_NAME).list()
-
-    if res:
-        st.write(f"📦 Root-level objects in bucket `{BUCKET_NAME}`:")
-        for obj in res:
-            st.write(f"- {obj['name']}")
-            # If it's a folder, list inside it
-            if obj['metadata'].get('mimetype') == 'application/vnd.supabase.folder':
-                folder = obj['name']
-                sub_res = supabase.storage.from_(BUCKET_NAME).list(folder)
-                for sub_obj in sub_res:
-                    st.write(f"  └── {folder}/{sub_obj['name']}")
-    else:
-        st.warning(f"No files found in bucket `{BUCKET_NAME}`.")
-
-except Exception as e:
-    st.error(f"❌ Failed to list bucket `{BUCKET_NAME}`")
-    st.write("Exception details:", str(e))
-
-
-
-
-
-
-
-
-
-
-
 
 try:
     TOPIC_BUCKET = 'topic.map'
