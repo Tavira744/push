@@ -58,14 +58,14 @@ if uploaded_file is not None:
 
         # Log the result into the Supabase Postgres table
         try:
-            """
-            st.write("🚨 Insert payload going to Supabase:", {
-                'filename': uploaded_file.name,
-                'unique_name': unique_name,
-                'status': status,
-                'error_message': error_message if error_message is not None else ''
-            })
-            """
+            
+            #st.write("🚨 Insert payload going to Supabase:", {
+            #    'filename': uploaded_file.name,
+            #    'unique_name': unique_name,
+            #    'status': status,
+            #    'error_message': error_message if error_message is not None else ''
+            #})
+            
             
             log_res = supabase.table('upload_logs').insert({
                 'filename': uploaded_file.name,
@@ -78,7 +78,7 @@ if uploaded_file is not None:
             log_res_dict = log_res.__dict__
             if log_res_dict.get('data'):
                # st.info("📝 Upload log saved to database.")
-               "xxxxxx"
+               # st.info("📝 Ready for processing.")
             else:
                 st.warning("⚠ Failed to log upload to database.")
                 st.write("Log response details:", log_res_dict)
