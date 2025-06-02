@@ -117,7 +117,8 @@ try:
             })
 
     st.info("✅ Loaded question_map.xml successfully")
-    st.write("📦 Loaded Questions Map:", questions_data[20])
+    #st.write("📦 Loaded Questions Map:", questions_data)
+    st.write("📦 Loaded Questions Map.")
 
 except Exception as e:
     st.warning("⚠ Failed to load question_map.xml from Supabase Storage.")
