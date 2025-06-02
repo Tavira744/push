@@ -63,7 +63,7 @@ if uploaded_file is not None:
             #    'filename': uploaded_file.name,
             #    'unique_name': unique_name,
             #    'status': status,
-            #    'error_message': error_message if error_message is not None else ''
+            #    'error_message': error_message if error_message is not None else '',
             #})
             
             
@@ -71,7 +71,8 @@ if uploaded_file is not None:
                 'filename': uploaded_file.name,
                 'unique_name': unique_name,
                 'status': status,
-                'error_message': error_message
+                'error_message': error_message,
+                'user_ip': 'unknown'
             }).execute()
         
             # Safely display log response
