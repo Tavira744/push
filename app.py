@@ -160,7 +160,7 @@ Output as JSON array:
 
         # Send to OpenAI GPT
         response = openai.ChatCompletion.create(
-            model="model="gpt-3.5-turbo",
+            model="gpt-3.5-turbo",
             messages=[{"role": "user", "content": prompt}],
             temperature=0
         )
