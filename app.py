@@ -100,7 +100,6 @@ try:
     xml_content = ref_file_res.decode('utf-8')
 
     root = ET.fromstring(xml_content)
-    st.write("HERE...")
     questions_data = {}
     for topic in root.findall('topic'):
         topic_name = topic.get('name')
@@ -118,7 +117,7 @@ try:
             })
 
     st.info("✅ Loaded question_map.xml successfully")
-    st.write("📦 Loaded Questions Map:", questions_data)
+    st.write("📦 Loaded Questions Map:", questions_data[20])
 
 except Exception as e:
     st.warning("⚠ Failed to load question_map.xml from Supabase Storage.")
