@@ -124,4 +124,58 @@ except Exception as e:
     st.warning("⚠ Failed to load question_map.xml from Supabase Storage.")
     st.write("Exception details:", str(e))
 
+#######################################################################################
+########################################## agent AI ###################################
+
+import openai
+import json
+import pandas as pd
+
+# Set OpenAI API key
+openai.api_key = st.secrets['OPENAI_API_KEY']
+
+# Check if a file was uploaded
+if uploaded_file is not None:
+    st.info("🚀 Sending uploaded file to AI agent for passenger extraction...")
+
+    try:
+        # Read and decode the file content
+        file_content = uploaded_file.read().decode('utf-8')
+
+        # Build the prompt
+        prompt = f"""
+You are an expert at reading airline booking files (PNRs).
+Given the following file content, extract a table listing:
+PNR Reference, Name, Surname, Date of Birth, Seat Number.
+
+File content:
+{file_content}
+
+Output as JSON array:
+[
+    {{"pnr_reference": "...", "name": "...", "surname": "...", "dob": "...", "seat_number": "..."}},
+    ...
+]
+"""
+
+        # Send to OpenAI GPT
+        response = openai.ChatCompletion.create(
+            model="gpt-4",
+            messages=[{"role": "user", "content": prompt}],
+            temperature=0
+        )
+
+        # Parse GPT response
+        response_text = response['choices'][0]['message']['content']
+        passenger_list = json.loads(response_text)
+
+        # Convert to DataFrame
+        df = pd.DataFrame(passenger_list)
+
+        st.success("✅ Passenger table extracted successfully!")
+        st.dataframe(df)
+
+    except Exception as e:
+        st.error("❌ AI agent failed to extract passenger data.")
+        st.write("⚠ Exception details:", str(e))
 
