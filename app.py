@@ -93,7 +93,7 @@ if uploaded_file is not None:
 BUCKET_NAME = 'topic.map' 
 try:
     # List all files/objects in the bucket
-    res = supabase.storage.from_(BUCKET_NAME).list()
+    res = supabase.storage.from_(BUCKET_NAME).list('configs')
     
     if res:
         st.write(f"📦 Objects in bucket `{BUCKET_NAME}`:")
