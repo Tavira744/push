@@ -2,6 +2,7 @@ import streamlit as st
 from supabase import create_client, Client
 import time
 import os
+import xml.etree.ElementTree as ET
 
 
 # Load Supabase credentials from Streamlit secrets
