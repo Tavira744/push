@@ -199,3 +199,5 @@ Only include fields in the header if they actually appear in the file.
         st.subheader("🧳 Passenger List")    
         st.dataframe(df)
 
+    except Exception as e:
+        st.write("Exception ...")
