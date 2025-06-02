@@ -91,6 +91,14 @@ if uploaded_file is not None:
 # NEW SECTION: Load question_map.xml from Supabase Storage
 #####################################################################################
 BUCKET_NAME = 'topic.map' 
+
+try:
+    res = supabase.storage.from_('topic.map').download('question_map.xml')
+    st.success("✅ Successfully downloaded question_map.xml directly!")
+except Exception as e:
+    st.error(f"❌ Direct download failed: {str(e)}")
+
+
 try:
     # List root-level objects
     res = supabase.storage.from_(BUCKET_NAME).list()
